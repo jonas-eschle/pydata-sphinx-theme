@@ -5,6 +5,7 @@ list see the documentation:
 https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
 
+
 # -- Path setup --------------------------------------------------------------
 import os
 import sys
@@ -111,7 +112,7 @@ if not version_match or version_match.isdigit() or version_match == "latest":
         # but we want the whole url if we are effectively in a released version
         json_url = "_static/switcher.json"
     else:
-        version_match = "v" + release
+        version_match = f"v{release}"
 
 html_theme_options = {
     "external_links": [

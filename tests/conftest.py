@@ -37,7 +37,7 @@ class SphinxBuild:
     def build(self, no_warning: bool = True) -> Self:
         """Build the application."""
         self.app.build()
-        if no_warning is True:
+        if no_warning:
             assert self.warnings == "", self.status
         return self
 

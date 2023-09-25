@@ -36,18 +36,12 @@ def setup_logo_path(
     # Define the final path to logo images in the HTML context
     theme_logo["image_relative"] = {}
     for kind in ["light", "dark"]:
-        image_kind_logo = theme_logo.get(f"image_{kind}")
-
-        # If it's a URL the "relative" path is just the URL
-        # else we need to calculate the relative path to a local file
-        if image_kind_logo:
+        if image_kind_logo := theme_logo.get(f"image_{kind}"):
             if not isurl(image_kind_logo):
                 image_kind_name = Path(image_kind_logo).name
                 image_kind_logo = pathto(f"_static/{image_kind_name}", resource=True)
             theme_logo["image_relative"][kind] = image_kind_logo
 
-        # If there's no custom logo for this kind, just use `html_logo`
-        # If `logo` is also None, then do not add this key to context.
         elif isinstance(logo, str) and len(logo) > 0:
             theme_logo["image_relative"][kind] = logo
 

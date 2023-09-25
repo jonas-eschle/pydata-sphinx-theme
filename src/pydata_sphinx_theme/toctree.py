@@ -59,7 +59,7 @@ def add_toctree_functions(
             dropdown_text:Text of the dropdown element button.
         """
         try:
-            n_links_before_dropdown = int(n_links_before_dropdown)
+            n_links_before_dropdown = n_links_before_dropdown
         except Exception:
             raise ValueError(
                 f"n_links_before_dropdown is not an int: {n_links_before_dropdown}"
@@ -242,7 +242,7 @@ def add_toctree_functions(
             add_collapse_checkboxes(soup)
 
             # Open the sidebar navigation to the proper depth
-            for ii in range(int(show_nav_level)):
+            for ii in range(show_nav_level):
                 for checkbox in soup.select(
                     f"li.toctree-l{ii} > input.toctree-checkbox"
                 ):
@@ -285,19 +285,12 @@ def add_toctree_functions(
         if len(h1_headers) == 1:
             title = h1_headers[0]
             # If we have no sub-headers of a title then we won't have a TOC
-            if not title.select(".toc-h2"):
-                out = ""
-            else:
-                out = title.find("ul")
-        # Else treat the h1 headers as sections
+            out = "" if not title.select(".toc-h2") else title.find("ul")
         else:
             out = soup
 
         # Return the toctree object
-        if kind == "html":
-            return out
-        else:
-            return soup
+        return out if kind == "html" else soup
 
     def navbar_align_class() -> List[str]:
         """Return the class that aligns the navbar based on config."""
@@ -332,8 +325,7 @@ def add_collapse_checkboxes(soup: BeautifulSoup) -> None:
 
         # expanding the parent part explicitly, if present
         if "current" in classes:
-            parentli = element.find_parent("li", class_="toctree-l0")
-            if parentli:
+            if parentli := element.find_parent("li", class_="toctree-l0"):
                 parentli.select("p.caption ~ input")[0].attrs["checked"] = ""
 
         # Nothing more to do, unless this has "children"
@@ -403,8 +395,7 @@ def get_local_toctree_for(
 
     # TODO: use `doctree.findall(addnodes.toctree)` once docutils min version >=0.18.1
     for toctreenode in traverse_or_findall(doctree, addnodes.toctree):
-        toctree = self.resolve(docname, builder, toctreenode, prune=True, **kwargs)
-        if toctree:
+        if toctree := self.resolve(docname, builder, toctreenode, prune=True, **kwargs):
             toctrees.append(toctree)
     if not toctrees:
         return None

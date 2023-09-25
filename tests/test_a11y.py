@@ -61,15 +61,12 @@ def url_base():
             time.sleep(1)
             retries -= 1
 
-    # If the code above never yields a URL, then we were never able to connect
-    # to the server and retries == 0.
     if not retries:
         raise RuntimeError("Failed to start http server in 5 seconds")
-    else:
-        # Otherwise the server started and this fixture is done now and we clean
-        # up by stopping the server.
-        process.terminate()
-        process.wait()
+    # Otherwise the server started and this fixture is done now and we clean
+    # up by stopping the server.
+    process.terminate()
+    process.wait()
 
 
 @pytest.mark.a11y
@@ -116,7 +113,7 @@ def test_axe_core(
     # against the whole page because in this test we're not trying to find
     # accessibility violations in the nav, sidebar, footer, or other parts of
     # the PyData Sphinx Theme documentation website.)
-    results = page.evaluate("axe.run()" if selector == "" else f"axe.run('{selector}')")
+    results = page.evaluate("axe.run()" if not selector else f"axe.run('{selector}')")
 
     # Expect Axe-core to have found 0 accessibility violations
     assert len(results["violations"]) == 0, pretty_axe_results(results, selector)
@@ -133,8 +130,8 @@ def test_version_switcher_highlighting(page: Page, url_base: str) -> None:
         has_text=active_version_name
     )
     assert entries.count() == 2
+    light_mode = "rgb(39, 107, 233)"
     # make sure they're highlighted
     for entry in entries.all():
-        light_mode = "rgb(39, 107, 233)"
         # dark_mode = "rgb(121, 163, 142)"
         expect(entry).to_have_css("color", light_mode)
