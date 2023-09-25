@@ -38,8 +38,8 @@ def add_toctree_functions(
 
     @lru_cache(maxsize=None)
     def generate_header_nav_html(
-            n_links_before_dropdown: int = 5, dropdown_text: str = "More"
-        ) -> str:
+        n_links_before_dropdown: int = 5, dropdown_text: str = "More"
+    ) -> str:
         """Generate top-level links that are meant for the header navigation.
 
         We use this function instead of the TocTree-based one used for the
@@ -167,8 +167,8 @@ def add_toctree_functions(
     # somehow runs this twice in some circumstances in unpredictable ways.
     @lru_cache(maxsize=None)
     def generate_toctree_html(
-            kind: str, startdepth: int = 1, show_nav_level: int = 1, **kwargs
-        ) -> Union[BeautifulSoup, str]:
+        kind: str, startdepth: int = 1, show_nav_level: int = 1, **kwargs
+    ) -> Union[BeautifulSoup, str]:
         """Return the navigation link structure in HTML.
 
         This is similar to Sphinx's own default TocTree generation, but it is modified
@@ -395,9 +395,7 @@ def get_local_toctree_for(
 
     # TODO: use `doctree.findall(addnodes.toctree)` once docutils min version >=0.18.1
     for toctreenode in traverse_or_findall(doctree, addnodes.toctree):
-        if toctree := self.resolve(
-            docname, builder, toctreenode, prune=True, **kwargs
-        ):
+        if toctree := self.resolve(docname, builder, toctreenode, prune=True, **kwargs):
             toctrees.append(toctree)
     if not toctrees:
         return None

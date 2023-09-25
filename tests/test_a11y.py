@@ -113,9 +113,7 @@ def test_axe_core(
     # against the whole page because in this test we're not trying to find
     # accessibility violations in the nav, sidebar, footer, or other parts of
     # the PyData Sphinx Theme documentation website.)
-    results = page.evaluate(
-        "axe.run()" if not selector else f"axe.run('{selector}')"
-    )
+    results = page.evaluate("axe.run()" if not selector else f"axe.run('{selector}')")
 
     # Expect Axe-core to have found 0 accessibility violations
     assert len(results["violations"]) == 0, pretty_axe_results(results, selector)
