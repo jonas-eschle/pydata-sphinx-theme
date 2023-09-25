@@ -39,13 +39,12 @@ def check_warnings(file: Path) -> bool:
     # find all the missing warnings
     missing_warnings = []
     for wa in ref_warnings:
-        index = [i for i, twa in enumerate(test_warnings) if wa in twa]
-        if len(index) == 0:
-            missing_warnings += [wa]
-            print(f"{Fore.YELLOW}Warning was not raised: {Fore.RESET}{wa}\n")
-        else:
+        if index := [i for i, twa in enumerate(test_warnings) if wa in twa]:
             test_warnings.pop(index[0])
 
+        else:
+            missing_warnings += [wa]
+            print(f"{Fore.YELLOW}Warning was not raised: {Fore.RESET}{wa}\n")
     # the remaining one are unexpected
     for twa in test_warnings:
         print(f"{Fore.YELLOW}Unexpected warning: {Fore.RESET}{twa}\n")

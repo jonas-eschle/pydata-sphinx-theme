@@ -325,10 +325,10 @@ def test_navbar_header_dropdown(sphinx_build_factory, n_links) -> None:
     if n_links == 0:
         # There should be *only* a dropdown and no standalone links
         assert len(dropdowns) == 1 and not standalone_links
-    if n_links == 4:
+    elif n_links == 4:
         # There should be `n_links` standalone links, and a dropdown
         assert len(standalone_links) == n_links and len(dropdowns) == 1
-    if n_links == 8:
+    elif n_links == 8:
         # There should be no dropdown and only standalone links
         assert standalone_links and not dropdowns
 
@@ -647,12 +647,11 @@ def test_analytics(sphinx_build_factory, provider, tags) -> None:
     sphinx_build.build()
     index_html = sphinx_build.html_tree("index.html")
 
-    # Search all the scripts and make sure one of them has the Google tag in there
-    tags_found = False
-    for script in index_html.select("script"):
-        if script.string and tags[0] in script.string and tags[1] in script.string:
-            tags_found = True
-    assert tags_found is True
+    tags_found = any(
+        script.string and tags[0] in script.string and tags[1] in script.string
+        for script in index_html.select("script")
+    )
+    assert tags_found
 
 
 def test_plausible(sphinx_build_factory) -> None:

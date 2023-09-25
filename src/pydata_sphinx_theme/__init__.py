@@ -97,17 +97,15 @@ def update_config(app):
             # check that the json file is not illformed,
             # throw a warning if the file is ill formed and an error if it's not json
             switcher_content = json.loads(content)
-            missing_url = any(["url" not in e for e in switcher_content])
-            missing_version = any(["version" not in e for e in switcher_content])
+            missing_url = any("url" not in e for e in switcher_content)
+            missing_version = any("version" not in e for e in switcher_content)
             if missing_url or missing_version:
                 logger.warning(
                     f'The version switcher "{json_url}" file is malformed'
                     ' at least one of the items is missing the "url" or "version" key'
                 )
 
-    # Add an analytics ID to the site if provided
-    analytics = theme_options.get("analytics", {})
-    if analytics:
+    if analytics := theme_options.get("analytics", {}):
         # Plausible analytics
         plausible_domain = analytics.get("plausible_analytics_domain")
         plausible_url = analytics.get("plausible_analytics_url")
@@ -121,9 +119,7 @@ def update_config(app):
             }
             app.add_js_file(**kwargs)
 
-        # Google Analytics
-        gid = analytics.get("google_analytics_id")
-        if gid:
+        if gid := analytics.get("google_analytics_id"):
             gid_js_path = f"https://www.googletagmanager.com/gtag/js?id={gid}"
             gid_script = f"""
                 window.dataLayer = window.dataLayer || [];
@@ -207,7 +203,7 @@ def update_and_remove_templates(
             # Add `.html` to templates with no suffix
             for ii, template in enumerate(context.get(section)):
                 if not os.path.splitext(template)[1]:
-                    context[section][ii] = template + ".html"
+                    context[section][ii] = f"{template}.html"
 
             # If this is the page TOC, check if it is empty and remove it if so
             def _remove_empty_templates(tname):
